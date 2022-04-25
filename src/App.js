@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./App.css";
 
 function App() {
+  //creating the state
+  const [coins, setCoins] = useState([]);
+  //a function that gets the values and the data
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+      )
+      .then((res) => {
+        setCoins(res.data);
+        // console.log(res.data);
+      }).catch(error => console.log(error))
+  }, []);
+
+  const handleChange = e => {
+    setSearch(e.target.value)
+  }
+  
+  //a FUNCTION TO FILTER OUT THE COINS AND DISPLAYS WHATEVER WE TYPE IN
+  
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="coin-app">
+      <div className="coin-search">
+        <h1 className="coin-text">Search a currency</h1>
+        <form>
+          <input type="text" placeholder="Search" className="coin-input" onChange={handleChange} />
+        </form>
+      </div>  
+
     </div>
   );
 }
