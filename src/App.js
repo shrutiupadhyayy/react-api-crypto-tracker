@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
+import Coin from "./Coin";
 
 function App() {
   //creating the state
@@ -19,12 +20,15 @@ function App() {
       }).catch(error => console.log(error))
   }, []);
 
+   //An onChange event is triggered when values are entered in the input. This fires a function handleChange(), that is used to set a new state for the input
   const handleChange = e => {
     setSearch(e.target.value)
   }
   
   //a FUNCTION TO FILTER OUT THE COINS AND DISPLAYS WHATEVER WE TYPE IN
-  
+  const filteredCoins = coins.filter(coin => 
+    coin.name.toLowerCase().includes(search.toLowerCase())
+    )
 
 
   return (
@@ -35,7 +39,17 @@ function App() {
           <input type="text" placeholder="Search" className="coin-input" onChange={handleChange} />
         </form>
       </div>  
+      {filteredCoins.map(coin => {
+        return <Coin 
+          key={coin.id} 
+          name={coin.name} 
+          image={coin.image} 
+          symbol={coin.symbol}
+          volume={coin.market_cap}
+          price={coin.current_price}
+          />;
 
+      })}
     </div>
   );
 }
